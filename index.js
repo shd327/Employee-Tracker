@@ -79,6 +79,13 @@ function promptUser() {
 
 // VIEW
 function viewDepartments() {
+    db.query('SELECT * FROM company_db.department;', (err, results) => {
+        if (err) {
+            console.log(err)
+        } else {
+            console.table(results)
+        }
+    })
 }
 function viewRoles() {
 }
@@ -86,6 +93,9 @@ function viewEmployees() {
 }
 function viewBudget() {
 }
+
+
+
 // ADD
 function addDepartment() {
 }
@@ -94,9 +104,13 @@ function addRole() {
 function addEmployee() {
 }
 
+
+
 //Update
 function updateEmployeeRole() {
 }
+
+
 //Delete
 function deleteDepartment() {
 }
