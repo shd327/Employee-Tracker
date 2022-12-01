@@ -1,4 +1,4 @@
-const { prompt } = require("inquirer");
+
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
 require('dotenv').config()
@@ -88,8 +88,22 @@ function viewDepartments() {
     })
 }
 function viewRoles() {
+    db.query('SELECT role.id, role.title, role.salary, role.department_id, department.name FROM department RIGHT JOIN role on department.id = role.department_id;', (err, results) => {
+        if (err) {
+            console.log(err)
+        } else {
+            console.table(results)
+        }
+    })
 }
 function viewEmployees() {
+    db.query('SELECT employee.id, employee.first_name, employee.last_name, employee.role_id, role.title, department.name, concat(manager.first_name, " ", manager.last_name) AS manager FROM role JOIN employee on role.Id = employee.role_id LEFT JOIN employee manager on employee.manager_id = manager.id JOIN department on department.id = role.department_id;', (err, results) => {
+        if (err) {
+            console.log(err)
+        } else {
+            console.table(results)
+        }
+    })
 }
 function viewBudget() {
 }
@@ -98,8 +112,64 @@ function viewBudget() {
 
 // ADD
 function addDepartment() {
+    return inquirer.prompt([
+        {
+            type: "input",
+            name: "department_name",
+            message: "Please enter a department name",
+
+        }
+    ]).then((results) => {
+        db.query(`INSERT INTO department(name) VALUES ('${results.department_name}')`, (err, results) => {
+            if (err) {
+                console.log(err)
+            } else {
+                viewDepartments()
+            }
+        })
+    })
+
+    // inqurier
 }
 function addRole() {
+    var departmentArray = []
+    db.query('SELECT * FROM department', (err, results) => {
+        results.forEach((result) => { departmentArray.push({ name: result.name, value: result.id }) })
+        // console.log(results)
+        // console.log(departmentArray)
+        return inquirer.prompt([
+            {
+                type: "list",
+                name: "displayDepartment",
+                choices: departmentArray,
+                message: "Please choose a department",
+            },
+            {
+                type: "input",
+                name: "roleTitle",
+                message: "please input a name for this role",
+
+            },
+            {
+                type: "input",
+                name: "roleSalary",
+                message: "please input a salary for this role",
+
+            }
+        ]).then((results) => {
+            db.query(`INSERT INTO role(title, salary, department_id ) VALUES ('${results.roleTitle}', '${results.roleSalary}', '${results.displayDepartment}')`, (err, results) => {
+                if (err) {
+                    console.log(err)
+                } else {
+                    viewDepartments()
+                }
+            })
+        })
+    })
+
+
+
+
 }
 function addEmployee() {
 }
