@@ -78,6 +78,29 @@ function promptUser() {
 
 
 // VIEW
+function viewDepartments() {
+}
+function viewRoles() {
+}
+function viewEmployees() {
+}
+function viewBudget() {
+}
 // ADD
+function addDepartment() {
+}
+function addRole() {
+}
+function addEmployee() {
+}
+
 //Update
+function updateEmployeeRole() {
+}
 //Delete
+function deleteDepartment() {
+}
+function deleteRole() {
+}
+function deleteEmployee() {
+}
