@@ -1,0 +1,25 @@
+{
+  "name": "employeetracker",
+  "version": "1.0.0",
+  "description": "An application to maintain an employee database",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shd327/Employee-Tracker.git"
+  },
+  "author": "siddharth desai",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shd327/Employee-Tracker/issues"
+  },
+  "homepage": "https://github.com/shd327/Employee-Tracker#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "dotenv": "^16.0.3",
+    "inquirer": "^8.2.4",
+    "mysql2": "^2.3.3"
+  }
+}
