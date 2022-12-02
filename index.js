@@ -97,7 +97,7 @@ function viewRoles() {
     })
 }
 function viewEmployees() {
-    db.query('SELECT employee.id, employee.first_name, employee.last_name, employee.role_id, role.title, department.name, concat(manager.first_name, " ", manager.last_name) AS manager FROM role JOIN employee on role.Id = employee.role_id LEFT JOIN employee manager on employee.manager_id = manager.id JOIN department on department.id = role.department_id;', (err, results) => {
+    db.query('SELECT employee.id, employee.first_name, employee.last_name, employee.role_id, role.title, department.name, concat(manager.first_name, " ", manager.last_name) AS manager FROM role JOIN employee on role.id = employee.role_id LEFT JOIN employee manager on employee.manager_id = manager.id JOIN department on department.id = role.department_id;', (err, results) => {
         if (err) {
             console.log(err)
         } else {
@@ -132,9 +132,10 @@ function addDepartment() {
     // inqurier
 }
 function addRole() {
-    var departmentArray = []
+
     db.query('SELECT * FROM department', (err, results) => {
-        results.forEach((result) => { departmentArray.push({ name: result.name, value: result.id }) })
+        var departmentArray = []
+        results.forEach((result) => departmentArray.push({ name: result.name, value: result.id }))
         // console.log(results)
         // console.log(departmentArray)
         return inquirer.prompt([
@@ -161,7 +162,7 @@ function addRole() {
                 if (err) {
                     console.log(err)
                 } else {
-                    viewDepartments()
+                    viewRoles()
                 }
             })
         })
@@ -172,6 +173,45 @@ function addRole() {
 
 }
 function addEmployee() {
+    return inquirer.prompt([
+        {
+            type: "input",
+            name: "employeeFirstName",
+            message: "Please enter the employees first name"
+        },
+        {
+            type: "input",
+            name: "employeeLastName",
+            message: "Please enter the employees last name"
+        },
+        {
+            type: "input",
+            name: "roleId",
+            message: "Please enter a role id for the employee"
+        }
+    ]).then((data) => {
+
+        db.query("SELECT * from employee WHERE manager_id is null", function (err, results) {
+            var managerArray = []
+            console.log(results)
+            results.forEach((result) => managerArray.push({ name: result.first_name + " " + result.last_name, value: result.id }))
+            console.log(managerArray)
+            return inquirer.prompt([
+                {
+                    type: "list",
+                    name: "manager",
+                    message: "Who is the employee's manager?",
+                    choices: managerArray
+                },
+            ]).then((selectedManager) => {
+                db.query(`INSERT  INTO company_db.employee (company_db.employee.first_name, company_db.employee.last_name, company_db.employee.role_id, company_db.employee.manager_id) Values("${data.employeeFirstName}", "${data.employeeLastName}", ${data.roleId}, ${selectedManager.manager})`, function (err, results) { // working, the placeholder needed to be in ()
+                    if (err) throw new Error("query failure : ", err);
+                })
+                viewEmployees();
+            })
+
+        })
+    })
 }
 
 
