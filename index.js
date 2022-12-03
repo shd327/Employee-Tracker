@@ -84,8 +84,10 @@ function viewDepartments() {
             console.log(err)
         } else {
             console.table(results)
+            promptUser()
         }
     })
+
 }
 function viewRoles() {
     db.query('SELECT role.id, role.title, role.salary, role.department_id, department.name FROM department RIGHT JOIN role on department.id = role.department_id;', (err, results) => {
@@ -93,6 +95,7 @@ function viewRoles() {
             console.log(err)
         } else {
             console.table(results)
+            promptUser()
         }
     })
 }
@@ -102,6 +105,7 @@ function viewEmployees() {
             console.log(err)
         } else {
             console.table(results)
+            promptUser()
         }
     })
 }
@@ -125,6 +129,7 @@ function addDepartment() {
                 console.log(err)
             } else {
                 viewDepartments()
+                promptUser()
             }
         })
     })
@@ -163,6 +168,7 @@ function addRole() {
                     console.log(err)
                 } else {
                     viewRoles()
+                    promptUser()
                 }
             })
         })
@@ -206,6 +212,7 @@ function addEmployee() {
                     if (err) throw new Error("query failure : ", err);
                 })
                 viewEmployees();
+                promptUser()
             })
 
         })
@@ -238,6 +245,7 @@ function updateEmployeeRole() {
                 if (err) throw new Error("query failure : ", err);
             })
             viewEmployees()
+            promptUser()
 
         })
 
@@ -258,14 +266,20 @@ function deleteDepartment() {
                 message: "Which department would you like to delete?",
                 choices: deparmentArray
             }
-        ])
+        ]).then((data) => {
+            db.query(`DELETE FROM department WHERE id=${data.deparmentToBeDeleted}`, (err, results) => {
+                if (err) throw new Error("query failure : ", err);
+            })
+            viewDepartments()
+            promptUser()
+        })
 
     })
 }
 function deleteRole() {
     db.query('SELECT * FROM role', (err, results) => {
         var roleArray = []
-        results.forEach((result) => deparmentArray.push({ name: result.title, value: result.id }))
+        results.forEach((result) => roleArray.push({ name: result.title, value: result.id }))
         return inquirer.prompt([
             {
                 type: "list",
@@ -273,14 +287,20 @@ function deleteRole() {
                 message: "Which role would you like to delete?",
                 choices: roleArray
             }
-        ])
+        ]).then((data) => {
+            db.query(`DELETE FROM role WHERE id=${data.roleToBeDeleted}`, (err, results) => {
+                if (err) throw new Error("query failure : ", err);
+            })
+            viewRoles()
+            promptUser()
+        })
 
     })
 }
 function deleteEmployee() {
     db.query('SELECT * FROM employee', (err, results) => {
         var employeeArray = []
-        results.forEach((result) => deparmentArray.push({ name: result.first_name + " " + result.last_name, value: result.id }))
+        results.forEach((result) => employeeArray.push({ name: result.first_name + " " + result.last_name, value: result.id }))
         return inquirer.prompt([
             {
                 type: "list",
@@ -288,7 +308,14 @@ function deleteEmployee() {
                 message: "Which employee would you like to delete?",
                 choices: employeeArray
             }
-        ])
+        ]).then((data) => {
+            db.query(`DELETE FROM employee WHERE id=${data.employeeToBeDeleted}`, (err, results) => {
+                if (err) throw new Error("query failure : ", err);
+            })
+            viewEmployees()
+            promptUser()
+
+        })
 
     })
 }
