@@ -125,13 +125,12 @@ function addDepartment() {
         }
     ]).then((results) => {
         db.query(`INSERT INTO department(name) VALUES ('${results.department_name}')`, (err, results) => {
-            if (err) {
-                console.log(err)
-            } else {
-                viewDepartments()
-                promptUser()
-            }
+            if (err) throw new Error("query failure : ", err);
         })
+        viewDepartments()
+        promptUser()
+
+
     })
 
     // inqurier
