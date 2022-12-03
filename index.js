@@ -250,18 +250,42 @@ function updateEmployeeRole() {
 function deleteDepartment() {
     db.query('SELECT * FROM department;', (err, results) => {
         var deparmentArray = []
+        return inquirer.prompt([
+            {
+                type: "list",
+                name: "deparmentToBeDeleted",
+                message: "Which department would you like to delete?",
+                choices: deparmentArray
+            }
+        ])
 
     })
 }
 function deleteRole() {
     db.query('SELECT * FROM role', (err, results) => {
         var roleArray = []
+        return inquirer.prompt([
+            {
+                type: "list",
+                name: "roleToBeDeleted",
+                message: "Which role would you like to delete?",
+                choices: roleArray
+            }
+        ])
 
     })
 }
 function deleteEmployee() {
     db.query('SELECT * FROM employee', (err, results) => {
         var employeeArray = []
+        return inquirer.prompt([
+            {
+                type: "list",
+                name: "employeeToBeDeleted",
+                message: "Which employee would you like to delete?",
+                choices: employeeArray
+            }
+        ])
 
     })
 }
