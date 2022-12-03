@@ -193,9 +193,7 @@ function addEmployee() {
 
         db.query("SELECT * from employee WHERE manager_id is null", function (err, results) {
             var managerArray = []
-            console.log(results)
             results.forEach((result) => managerArray.push({ name: result.first_name + " " + result.last_name, value: result.id }))
-            console.log(managerArray)
             return inquirer.prompt([
                 {
                     type: "list",
@@ -218,6 +216,33 @@ function addEmployee() {
 
 //Update
 function updateEmployeeRole() {
+    db.query("SELECT * from employee", function (err, results) {
+        var employeeArray = [];
+        results.forEach((result) => employeeArray.push({ name: result.first_name + " " + result.last_name, value: result.id }))
+        return inquirer.prompt([
+            {
+                type: "list",
+                name: "employeeToBeUpdated",
+                message: "Which employee would you like to update?",
+                choices: employeeArray
+            },
+            {
+                type: "input",
+                name: "role_id",
+                message: "Please enter a role number",
+
+            }
+        ]).then((data) => {
+            const { employeeToBeUpdated, role_id } = data
+            db.query(`UPDATE employee SET role_id=${role_id} WHERE id=${employeeToBeUpdated}`, (err, results) => {
+                if (err) throw new Error("query failure : ", err);
+            })
+            viewEmployees()
+
+        })
+
+    })
+
 }
 
 
