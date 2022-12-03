@@ -248,8 +248,20 @@ function updateEmployeeRole() {
 
 //Delete
 function deleteDepartment() {
+    db.query('SELECT * FROM department;', (err, results) => {
+        var deparmentArray = []
+
+    })
 }
 function deleteRole() {
+    db.query('SELECT * FROM role', (err, results) => {
+        var roleArray = []
+
+    })
 }
 function deleteEmployee() {
+    db.query('SELECT * FROM employee', (err, results) => {
+        var employeeArray = []
+
+    })
 }
