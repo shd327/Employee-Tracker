@@ -1,4 +1,4 @@
-
+// Require in modules
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
 require('dotenv').config()
@@ -13,9 +13,10 @@ const db = mysql.createConnection(
     },
     console.log("Connected to the company_db database....")
 );
+// Throw error
 db.connect((err) => {
     if (err) {
-        throw error;
+        throw err;
     }
 });
 
@@ -77,7 +78,7 @@ function promptUser() {
 
 
 
-// VIEW
+// VIEW Departments
 function viewDepartments() {
     db.query('SELECT * FROM company_db.department;', (err, results) => {
         if (err) {
@@ -89,6 +90,7 @@ function viewDepartments() {
     })
 
 }
+// VIEW Roles
 function viewRoles() {
     db.query('SELECT role.id, role.title, role.salary, role.department_id, department.name FROM department RIGHT JOIN role on department.id = role.department_id;', (err, results) => {
         if (err) {
@@ -99,6 +101,7 @@ function viewRoles() {
         }
     })
 }
+// VIEW Employees
 function viewEmployees() {
     db.query('SELECT employee.id, employee.first_name, employee.last_name, employee.role_id, role.title, department.name, concat(manager.first_name, " ", manager.last_name) AS manager FROM role JOIN employee on role.id = employee.role_id LEFT JOIN employee manager on employee.manager_id = manager.id JOIN department on department.id = role.department_id;', (err, results) => {
         if (err) {
@@ -109,10 +112,33 @@ function viewEmployees() {
         }
     })
 }
+// VIEW Budget by department
 function viewBudget() {
+    db.query('SELECT * FROM department', (err, results) => {
+        let deparmentArray = []
+        results.forEach((result) => deparmentArray.push({ name: result.name, value: result.id }))
+        return inquirer.prompt([
+            {
+                type: "list",
+                name: "deparmentBudget",
+                message: "Which department would you like to view the total budget for?",
+                choices: deparmentArray
+            }
+        ]).then((data) => {
+            db.query(`SELECT SUM(role.salary) AS department_budget, department.name from employee JOIN role JOIN department on department.id = role.department_id ON employee.role_id = role.id WHERE role.department_id=${data.deparmentBudget}`, (err, results) => {
+
+                if (err) {
+                    console.log(err)
+                } else {
+                    console.table(results)
+                    promptUser()
+                }
+            })
+        })
+    })
 }
 
-// ADD
+// ADD Department
 function addDepartment() {
     inquirer.prompt([
         {
@@ -129,8 +155,10 @@ function addDepartment() {
         })
     })
 
-    // inqurier
+
 }
+
+// ADD Role
 function addRole() {
 
     db.query('SELECT * FROM department', (err, results) => {
@@ -165,9 +193,10 @@ function addRole() {
     })
 
 
-
-
 }
+
+// ADD Employee
+
 function addEmployee() {
     return inquirer.prompt([
         {
@@ -211,7 +240,7 @@ function addEmployee() {
 
 
 
-//Update
+//Update Employee
 function updateEmployeeRole() {
     db.query("SELECT * from employee", function (err, results) {
         var employeeArray = [];
@@ -243,7 +272,7 @@ function updateEmployeeRole() {
 }
 
 
-//Delete
+//Delete Department
 function deleteDepartment() {
     db.query('SELECT * FROM department;', (err, results) => {
         var deparmentArray = []
@@ -265,6 +294,7 @@ function deleteDepartment() {
 
     })
 }
+//Delete Role
 function deleteRole() {
     db.query('SELECT * FROM role', (err, results) => {
         var roleArray = []
@@ -286,6 +316,7 @@ function deleteRole() {
 
     })
 }
+//Delete Employee
 function deleteEmployee() {
     db.query('SELECT * FROM employee', (err, results) => {
         var employeeArray = []
