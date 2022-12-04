@@ -116,10 +116,12 @@ Want to learn more please contact me at shdesai327@gmail.com
 
 ## Links
 
-* https://github.com/SHD327/Employee-Tracker
+* [Github Link](https://github.com/SHD327/Employee-Tracker)
+* [Video Link](https://drive.google.com/file/d/1WqmQ3sVkOKnUpkWVzaYo9FJ5fRhqmooo/view?usp=sharing) 
 
 ## Resources
 * https://www.npmjs.com/package/inquirer
 * https://www.mysql.com/
 * https://www.npmjs.com/package/dotenv
 * https://www.w3schools.com/sql/
+* https://developer.mozilla.org/en-US/docs/Web/API/console/table
