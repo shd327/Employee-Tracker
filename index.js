@@ -112,11 +112,9 @@ function viewEmployees() {
 function viewBudget() {
 }
 
-
-
 // ADD
 function addDepartment() {
-    return inquirer.prompt([
+    inquirer.prompt([
         {
             type: "input",
             name: "department_name",
@@ -124,13 +122,11 @@ function addDepartment() {
 
         }
     ]).then((results) => {
+
         db.query(`INSERT INTO department(name) VALUES ('${results.department_name}')`, (err, results) => {
-            if (err) throw new Error("query failure : ", err);
+            if (err) throw new Error("query failure : ", err)
+            viewDepartments()
         })
-        viewDepartments()
-        promptUser()
-
-
     })
 
     // inqurier
@@ -140,8 +136,6 @@ function addRole() {
     db.query('SELECT * FROM department', (err, results) => {
         var departmentArray = []
         results.forEach((result) => departmentArray.push({ name: result.name, value: result.id }))
-        // console.log(results)
-        // console.log(departmentArray)
         return inquirer.prompt([
             {
                 type: "list",
@@ -163,12 +157,9 @@ function addRole() {
             }
         ]).then((results) => {
             db.query(`INSERT INTO role(title, salary, department_id ) VALUES ('${results.roleTitle}', '${results.roleSalary}', '${results.displayDepartment}')`, (err, results) => {
-                if (err) {
-                    console.log(err)
-                } else {
-                    viewRoles()
-                    promptUser()
-                }
+                if (err) throw new Error("query failure : ", err);
+                viewRoles()
+
             })
         })
     })
@@ -209,9 +200,9 @@ function addEmployee() {
             ]).then((selectedManager) => {
                 db.query(`INSERT  INTO company_db.employee (company_db.employee.first_name, company_db.employee.last_name, company_db.employee.role_id, company_db.employee.manager_id) Values("${data.employeeFirstName}", "${data.employeeLastName}", ${data.roleId}, ${selectedManager.manager})`, function (err, results) { // working, the placeholder needed to be in ()
                     if (err) throw new Error("query failure : ", err);
+                    viewEmployees();
                 })
-                viewEmployees();
-                promptUser()
+
             })
 
         })
@@ -242,9 +233,8 @@ function updateEmployeeRole() {
             const { employeeToBeUpdated, role_id } = data
             db.query(`UPDATE employee SET role_id=${role_id} WHERE id=${employeeToBeUpdated}`, (err, results) => {
                 if (err) throw new Error("query failure : ", err);
+                viewEmployees()
             })
-            viewEmployees()
-            promptUser()
 
         })
 
@@ -268,9 +258,9 @@ function deleteDepartment() {
         ]).then((data) => {
             db.query(`DELETE FROM department WHERE id=${data.deparmentToBeDeleted}`, (err, results) => {
                 if (err) throw new Error("query failure : ", err);
+                viewDepartments()
             })
-            viewDepartments()
-            promptUser()
+
         })
 
     })
@@ -289,9 +279,9 @@ function deleteRole() {
         ]).then((data) => {
             db.query(`DELETE FROM role WHERE id=${data.roleToBeDeleted}`, (err, results) => {
                 if (err) throw new Error("query failure : ", err);
+                viewRoles()
             })
-            viewRoles()
-            promptUser()
+
         })
 
     })
@@ -310,9 +300,9 @@ function deleteEmployee() {
         ]).then((data) => {
             db.query(`DELETE FROM employee WHERE id=${data.employeeToBeDeleted}`, (err, results) => {
                 if (err) throw new Error("query failure : ", err);
+                viewEmployees()
             })
-            viewEmployees()
-            promptUser()
+
 
         })
 
