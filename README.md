@@ -64,9 +64,9 @@ git clone git@github.com:SHD327/Employee-Tracker.git
 {
   "dependencies": {
     "console.table": "^0.10.0",
-    "dotenv": "^10.0.0",
-    "inquirer": "^8.2.0",
-    "mysql2": "^2.3.3-rc.0"
+    "dotenv": "^16.0.3",
+    "inquirer": "^8.2.4",
+    "mysql2": "^2.3.3"
   }
 }
 
@@ -84,7 +84,7 @@ npm install dotenv
 
 ## Usage
 * Ensure all depencies and above steps are fulfilled 
-* Navigate to the working directory and open a terminal and run the below command
+* Navigate to the /db directory and open a terminal and run the below command
 ```
 mysql -u root -p
 ```
