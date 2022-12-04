@@ -47,12 +47,11 @@ THEN I am prompted to select an employee to update and their new role and this i
 2. [ Installation. ](#installation)
 3. [ Usage. ](#usage)
 4. [ License. ](#license)
-6. [ Tests. ](#tests)
+5. [ Tests. ](#tests)
+6. [ Screenshots. ](#screenshots)
 7. [ Questions. ](#questions)
-8. [ Video. ](#video)
-9. [ Screenshots. ](#screenshots)
-10. [ Links. ](#links)
-11. [ Resources. ](#resources)
+8. [ Links. ](#links)
+9. [ Resources. ](#resources)
 
 ## Installation
 * Clone the repository using:
@@ -100,8 +99,16 @@ node index.js
 
 ## License
 Free Use
+
 ## Tests
 N/A
+
+## Screenshots
+![](./Assets/role.PNG)
+![](./Assets/employees.PNG)
+![](./Assets/departments.PNG)
+![](./Assets/budgets.PNG)
+
 ## Questions?
 Want to see more of my work? [Github Link](https://github.com/SHD327)
 <br/>
